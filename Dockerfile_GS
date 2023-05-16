@@ -1,0 +1,22 @@
+FROM openjdk:11-jdk-slim-buster
+
+RUN groupadd --gid 10000 app && \
+    useradd  --gid 10000 --uid 10000 --create-home app && \
+    apt-get update && \
+    apt-get install -y procps less vim lsof net-tools telnet iputils-ping wget unzip git ant
+
+RUN mkdir -p /tmp/server/core && mkdir -p /tmp/server/data
+
+RUN git clone https://github.com/ldeazevedo/timeus_core.git /tmp/server/core
+RUN git clone https://github.com/ldeazevedo/timeus_data.git /tmp/server/data
+
+RUN cd /tmp/server/core && ant dist -f build.xml
+RUN cd /tmp/server/data && ant build -f build.xml
+
+RUN cp -r /tmp/server/core/build/dist/* /home/app/
+RUN cp -r /tmp/server/data/build/* /home/app/
+
+USER app
+WORKDIR /home/app
+
+RUN sleep infinity

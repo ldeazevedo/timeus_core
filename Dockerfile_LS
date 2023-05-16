@@ -1,0 +1,18 @@
+FROM openjdk:11-jdk-slim-buster
+
+RUN groupadd --gid 10000 app && \
+    useradd  --gid 10000 --uid 10000 --create-home app && \
+    apt-get update && \
+    apt-get install -y procps less vim lsof net-tools telnet iputils-ping wget unzip git ant
+
+RUN git clone https://github.com/ldeazevedo/timeus_core.git /home/app/loginserver
+
+RUN cd /home/app/loginserver && ant dist -f build.xml
+
+RUN chmod +x /home/app/loginserver/build/dist/login/LoginServer_loop.sh
+RUN chown -R app:app /home/app
+
+USER app
+WORKDIR /home/app/loginserver/build/dist/login/
+
+ENTRYPOINT ["bash", "-c", "./LoginServer_loop.sh"]
