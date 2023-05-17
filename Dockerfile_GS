@@ -16,7 +16,12 @@ RUN cd /tmp/server/data && ant build -f build.xml
 RUN cp -r /tmp/server/core/build/dist/* /home/app/
 RUN cp -r /tmp/server/data/build/* /home/app/
 
+RUN chown -R app:app /home/app
+RUN chmod +x /home/app/gameserver/GameServer_loop.sh
+
 USER app
-WORKDIR /home/app
+WORKDIR /home/app/gameserver/
 
 RUN sleep infinity
+#ENTRYPOINT ["sleep infinity"]
+#ENTRYPOINT ["bash", "-c", "./GameServer_loop.sh"]
