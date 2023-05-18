@@ -1427,8 +1427,7 @@ public final class Config
 		ALLOWED_BOXES = players.getProperty("AllowedBoxes", 2);
 		ALLOW_DUALBOX = players.getProperty("AllowDualBox", true);
 		String[] allowedChars = players.getProperty("AllowedChars", "").split(",");
-		for (String allowedChar : allowedChars)
-			FREE_BOX_CHARS.add(allowedChar);
+		FREE_BOX_CHARS.addAll(Arrays.asList(allowedChars));
 			
 		/** HAPPY HOUR */
 		HAPPY_HOUR_ENABLED = players.getProperty("HappyHourEnabled", false);
